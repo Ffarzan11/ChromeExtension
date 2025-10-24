@@ -1,12 +1,11 @@
 {
-    "manifest_version": 3,
-    "name": "Chrome Extension",
-    "version": "0.1.0",
-    "description": "A chrome extension to translate a full webpage.",
-    "action": {
-        "default_popup": "popup.html"
-    },
-    "permissions": [
-        "storage"
-    ]
+  "manifest_version": 3,
+  "name": "Chrome Translator Extension",
+  "version": "0.2.0",
+  "description": "Translate a webpage to English",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+ 
 }
