@@ -1,45 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root {
+  --bg-color: #0f172a;       /* deep navy blue */
+  --text-color: #e2e8f0;     /* soft white */
+  --accent-color: #3b82f6;   /* blue accent */
+  --toggle-bg: #1e293b;      /* dark gray background */
+  --toggle-active: #3b82f6;  /* light blue glow */
+  --toggle-knob: #f1f5f9;    /* off-white circle */
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  width: 220px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.popup-container {
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.4em;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+}
+
+/* Toggle Switch */
 .switch {
-    margin-left: 30%;
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
 }
 .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--toggle-bg);
+  transition: background-color 0.4s, box-shadow 0.3s;
+  border-radius: 34px;
 }
 .slider::before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--toggle-knob);
+  border-radius: 50%;
+  transition: transform 0.3s, background-color 0.3s;
 }
+
 input:checked + .slider {
-    background-color: #2196F3;
+  background-color: var(--toggle-active);
+  box-shadow: 0 0 12px var(--toggle-active);
 }
-input:checked + .slider:before {
-    transform: translateX(26px);
+
+input:checked + .slider::before {
+  transform: translateX(26px);
+  background-color: var(--bg-color);
 }
-.slider.round {
-    border-radius: 34px;
-}
-.slider.round::before {
-    border-radius: 50%;
-}
-.secret {
-    margin: 10px;
+
+/* Optional Subtle Hover Glow */
+.switch:hover .slider {
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
 }
