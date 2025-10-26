@@ -41,6 +41,54 @@ async function translateActiveTab() {
       return;
     }
 
+    // add loading overlay
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        // Create loading overlay
+        const overlay = document.createElement("div");
+        overlay.id = "translator-loading-overlay";
+        overlay.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="translator-spinner"></div>
+            <p style="color: white; margin-top: 15px; font-size: 16px;">Translating... please wait</p>
+          </div>
+        `;
+
+        // Add styles
+        const style = document.createElement("style");
+        style.textContent = `
+          #translator-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+          }
+          .translator-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: translator-spin 1s linear infinite;
+          }
+          @keyframes translator-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `;
+
+        document.head.appendChild(style);
+        document.body.appendChild(overlay);
+      },
+    });
+
     const translator = await Translator.create({
       sourceLanguage: language,
       targetLanguage: "en",
@@ -66,6 +114,7 @@ async function translateActiveTab() {
         return nodes;
       },
     });
+
     console.log("start translating text nodes...");
 
     const textNodes = results[0].result;
@@ -94,12 +143,27 @@ async function translateActiveTab() {
         while ((node = walker.nextNode())) {
           node.nodeValue = translatedNodes[i++];
         }
+        //remove the overlay
+        const overlay = document.getElementById("translator-loading-overlay");
+        if (overlay) overlay.remove();
       },
       args: [translatedNodes],
     });
-
     console.log("Page translation complete!");
   } catch (err) {
     console.error("Translation failed:", err);
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+
+    // remove the overlay in case of error
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        const overlay = document.getElementById("translator-loading-overlay");
+        if (overlay) overlay.remove();
+      },
+    });
   }
 }
