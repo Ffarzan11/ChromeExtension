@@ -2,12 +2,6 @@
 
 A simple Chrome extension that translates all text on a webpage with a single click.
 
-## Demo
-
-[VIDEO DEMO HERE]
-
-*A short video demonstrating how the extension works and its key features.*
-
 ## About The Project
 
 We built this extension to make the web more accessible for everyone, regardless of the language they speak. It allows you to instantly translate entire webpages using the Google Translate API, breaking down language barriers and making online content universally accessible.
